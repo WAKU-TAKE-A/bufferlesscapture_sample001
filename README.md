@@ -1,6 +1,6 @@
 # bufferlesscapture_sample001
 
-This is a sample of pypylon.
+This is a sample of bufferless capture.
 
 Copy camera_uvc.py to the Lib folder.
 
