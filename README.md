@@ -2,6 +2,8 @@
 
 This is a sample of bufferless capture.
 
+I am referring to [this page](https://stackoverflow.com/questions/43665208/how-to-get-the-latest-frame-from-capture-device-camera-in-opencv-python).
+
 Copy camera_uvc.py to the Lib folder.
 
 Try the following.
