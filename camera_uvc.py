@@ -6,8 +6,13 @@ import queue
 import cv2
 
 class BufferlessCapture:
-    # Initialize
+    """
+    Get the latest frame from capture device (camera).
+    """
     def __init__(self, id=0, width=640, height=480, exposure=-6):
+        """
+        Initialize
+        """
         self.cap = cv2.VideoCapture(id)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -18,13 +23,14 @@ class BufferlessCapture:
         print('Width = {0}'.format(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
         print('Height = {0}'.format(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         print('Exposure = {0}'.format(self.cap.get(cv2.CAP_PROP_EXPOSURE)))
-        print('')
         self.q = queue.Queue()
         t = threading.Thread(target=self._reader)
         t.daemon = True
         t.start()
-    # Read frames as soon as they are available, keeping only most recent one.
     def _reader(self):
+        """
+        Read frames as soon as they are available, keeping only most recent one.
+        """
         while True:
             ret, frame = self.cap.read()
             if not ret:
@@ -35,26 +41,38 @@ class BufferlessCapture:
                 except queue.Empty:
                     pass
             self.q.put(frame)
-    # Read
     def read(self):
+        """
+        Read
+        """
         return self.q.get()
-    # Release
     def release(self):
+        """
+        Release
+        """
         self.cap.release()
-    # View
-    # Close with ESC.
     def view(self, delay=1):
+        """
+        View
+
+        * Close with ESC.
+        """
         k = 0
         while k != 27:
-            img = self.grab()
+            ret, img = self.cap.read()
             cv2.namedWindow("img", cv2.WINDOW_KEEPRATIO | cv2.WINDOW_NORMAL)
             cv2.imshow("img", img)
             k = cv2.waitKey(delay)
         cv2.destroyAllWindows()
 
 class NormalCapture:
-    # Initialize
+    """
+    Get the frame from the capture device (camera) Ordinarily.
+    """
     def __init__(self, id=0, width=640, height=480, exposure=-6):
+        """
+        Initialize
+        """
         self.cap = cv2.VideoCapture(id)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -65,17 +83,23 @@ class NormalCapture:
         print('Width = {0}'.format(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
         print('Height = {0}'.format(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         print('Exposure = {0}'.format(self.cap.get(cv2.CAP_PROP_EXPOSURE)))
-        print('')
-    # Read
     def read(self):
+        """
+        Read
+        """
         ret, img = self.cap.read()
         return img
-    # Release
     def release(self):
+        """
+        Release
+        """
         self.cap.release()
-    # View
-    # Close with ESC.
     def view(self, delay=1):
+        """
+        View
+
+        * Close with ESC.
+        """
         k = 0
         while k != 27:
             ret, img = self.cap.read()
@@ -83,3 +107,4 @@ class NormalCapture:
             cv2.imshow("img", img)
             k = cv2.waitKey(delay)
         cv2.destroyAllWindows()
+
